@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5, user-scalable=no"/>
+<title>iPhone html5 Game</title>
+</head>
+
+<style>
+*{ padding:0px; margin:0px; }
+</style>
+
+<body>
+
+<script src="./js/sword.js"></script>
+
+<script src="./js/Point.js"></script>
+<script src="./js/Rectangle.js"></script>
+<script src="./js/Device.js"></script>
+<script src="./js/DisplayObject.js"></script>
+<script src="./js/DisplayObjectContainer.js"></script>
+
+<script src="./js/math/Math.js"></script>
+
+<script src="./js/utils/EventTarget.js"></script>
+
+<script src="./js/textures/BaseTexture.js"></script>
+<script src="./js/textures/Texture.js"></script>
+
+<script src="./js/libs/timer.js"></script>
+
+<script src="./js/libs/move.js"></script>
+<script src="./js/libs/astar.js"></script>
+
+<script src="./js/renderer/CanvasRenderer.js"></script>
+
+<script src="./js/libs/sprite.js"></script>
+<script src="./js/libs/animation.js"></script>
+
+<script src="./js/libs/eye.js"></script>
+<script src="./js/libs/foot.js"></script>
+
+<script src="./js/HP.js"></script>
+
+<script src="./js/extras/Role.js"></script>
+<script src="./js/extras/Light.js"></script>
+<script src="./js/extras/Skill.js"></script>
+
+<script src="./js/libs/mouseevent.js"></script>
+<script src="./js/libs/stage.js"></script>
+
+<script src="./js/Interactive.js"></script>
+
+<script src="./js/libs/fps.js"></script>
+
+<script src="./js/scenes.js"></script>
+<script src="./js/resources/images.js"></script>
+
+<script src="./js/loaders/AssetLoader.js"></script>
+
+<script src="./js/dom/DomContainer.js"></script>
+
+<script>
+
+var grid = { 
+	x: 30, 		 // 网格的坐标x
+	y: 60, 		 // 网格的位置y
+	row: 9, 	 // 行列数量
+	line: 9,
+	column: 5, 	 // 纵列数量
+	width: 100,  // 格子的宽度
+	height: 100, // 格子的高度
+	array: []	 // 生成的所有格子数组
+};
+
+var astar = new SWORD.AStar(grid);
+
+// 将A星数组，附到外部，使外部与内部的数组可以同步数据
+grid.array = astar.array;
+
+// var array = [2, 19, 25, 29, 38];
+var array = [19, 25];
+
+for ( var i = 0, len = array.length; i < len; i++ ) {
+	grid.array[array[i]].mark = 1;
+}
+
+
+
+// console.log(astar.getNumberOfRing(1,1));
+
+// console.log(astar.find(18, 9));
+
+// console.log( astar.getAroundTheGrid(40, 2, 0, true) );
+
+var GameStatus = true;
+var renderer = new SWORD.CanvasRenderer(960, 640);
+
+var DomGame = new SWORD.DomContainer(960, 640);
+DomGame.container.appendChild(renderer.canvas);
+
+var stage = new SWORD.Stage;
+var scenes = new SWORD.Scenes(stage);
+var fps = new SWORD.FPS();
+
+new SWORD.Play(GameStatus);
+
+new SWORD.interactive(stage);
+
+var animate = function animate(){
+	
+	if (!GameStatus) return;
+	
+	fps.updateTransform();
+	renderer.render(stage);
+		
+	requestAnimationFrame(animate);
+};
+
+animate();
+scenes.loading(imageResources);
+
+var show = new SWORD.ShowSelectSprite();
+
+</script>
+
+</body> 
+</html>
